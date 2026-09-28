@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>שילובים · בודק אינטראקציות</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Secular+One&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg:#17131F;--s1:#211B2B;--s2:#2B2438;--line:#3A3149;--tx:#EFEAF6;--mu:#A89FB8;--ac:#B9A6FF;--ac2:#4A3D66;
+--r3:#FF7B6F;--r3b:#401D22;--r2:#FFAA5F;--r2b:#3C2718;--r1:#F0D06A;--r1b:#342D17;--r0:#78D3A2;--r0b:#16302A;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17131F}}
+:root[data-theme="dark"]{--bg:#17131F}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:"Heebo","Segoe UI",Arial,sans-serif;font-size:16px;line-height:1.6}
+main{max-width:820px;margin:0 auto;padding:0 16px 64px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--bg);padding:14px 0 10px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.logo{font-family:"Secular One","Heebo",Arial,sans-serif;font-size:28px;line-height:1;margin:0;display:flex;align-items:center;gap:10px}
+.logo i{display:inline-block;width:30px;height:14px;border-radius:999px;background:linear-gradient(to left,var(--ac) 50%,var(--ac2) 50%)}
+.tag{font-size:13px;color:var(--mu)}
+nav{display:flex;gap:4px;margin-top:12px;background:var(--s1);border-radius:999px;padding:4px}
+nav a{flex:1;text-align:center;padding:8px 6px;border-radius:999px;color:var(--mu);text-decoration:none;font-weight:500;font-size:15px}
+nav a[aria-current=page]{background:var(--ac);color:#1B1428}
+h2{font-family:"Secular One","Heebo",Arial,sans-serif;font-weight:400;font-size:22px;margin:28px 0 10px}
+h3{font-weight:700;font-size:17px;margin:20px 0 8px}
+p{margin:0 0 10px}
+.mu{color:var(--mu)}
+a{color:var(--ac)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+input[type=search]{width:100%;font:inherit;padding:12px 16px;border:1px solid var(--line);border-radius:14px;background:var(--s1);color:var(--tx);margin-top:18px}
+.gname{font-size:13px;color:var(--mu);margin:18px 0 8px}
+.caps{display:flex;flex-wrap:wrap;gap:8px}
+.cap{display:inline-flex;align-items:stretch;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--s1);padding:0;text-align:right}
+.cap .h{width:14px;background:var(--ac2);transition:background .15s}
+.cap span{padding:6px 12px 6px 14px;font-size:15px;line-height:1.3}
+.cap small{display:block;font-size:12px;color:var(--mu)}
+.cap[aria-pressed=true]{border-color:var(--ac);background:var(--s2)}
+.cap[aria-pressed=true] .h{background:var(--ac)}
+.tray{position:sticky;top:calc(env(safe-area-inset-top,0px) + 112px);z-index:5;background:var(--bg);padding:14px 0 12px;margin-top:22px;border-bottom:1px solid var(--line)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ghost{background:none;border:1px solid var(--line);border-radius:999px;padding:5px 14px;font-size:14px}
+.pri{background:var(--ac);color:#1B1428;border:none;border-radius:999px;padding:9px 18px;font-weight:700}
+.verdict{margin-top:10px;border-radius:14px;padding:12px 16px;font-weight:500}
+.v3{background:var(--r3b);color:var(--r3)}.v2{background:var(--r2b);color:var(--r2)}.v1{background:var(--r1b);color:var(--r1)}.v0{background:var(--r0b);color:var(--r0)}
+.vn{background:var(--s1);color:var(--mu);font-weight:400}
+.alert{border-inline-start:3px solid var(--r2);background:var(--s1);padding:12px 14px;margin:10px 0}
+.alert b{display:block}
+.pair{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.bd{font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;white-space:nowrap;align-self:start;margin-top:3px}
+.b3{background:var(--r3b);color:var(--r3)}.b2{background:var(--r2b);color:var(--r2)}.b1{background:var(--r1b);color:var(--r1)}.b0{background:var(--r0b);color:var(--r0)}
+.pn{font-weight:500}.pt{color:var(--mu);font-size:15px}
+.card{background:var(--s1);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin:10px 0}
+.card p{color:var(--mu);font-size:15px;margin:4px 0 0}
+.legend{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0}
+.mx-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--s1)}
+table.mx{border-collapse:separate;border-spacing:3px;padding:6px}
+.mx th{font-weight:500;font-size:12px;color:var(--mu);white-space:nowrap}
+.mx thead th{writing-mode:vertical-rl;transform:rotate(180deg);height:110px;text-align:left;padding:4px 0}
+.mx tbody th{text-align:right;padding-left:8px;position:sticky;right:0;background:var(--s1)}
+.mx td{width:28px;height:28px;min-width:28px;border-radius:7px;padding:0}
+.mx td button{width:100%;height:100%;border:none;border-radius:7px;background:transparent}
+.c3{background:var(--r3)}.c2{background:var(--r2)}.c1{background:var(--r1)}.c0{background:var(--r0b)}.cx{background:var(--s2)}
+.mx td.on{outline:2px solid var(--tx)}
+.seg{display:flex;gap:6px;margin:14px 0}
+.seg button{background:var(--s1);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:14px}
+.seg button[aria-pressed=true]{border-color:var(--ac);color:var(--ac)}
+.fam{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.fam a{display:block;background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:10px 14px;color:var(--tx);text-decoration:none}
+.fam small{display:block;color:var(--mu);font-size:13px}
+.dt h1{font-family:"Secular One","Heebo",Arial,sans-serif;font-weight:400;font-size:34px;line-height:1.1;margin:22px 0 4px}
+.chip{display:inline-block;background:var(--s2);border-radius:999px;padding:3px 12px;font-size:13px;color:var(--ac);margin:6px 0 14px}
+.help{margin-top:40px;padding:16px 18px;border-radius:16px;background:var(--s2)}
+.help a{font-weight:700}
+.fine{font-size:13px;color:var(--mu);margin-top:16px}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <div class="brand"><p class="logo"><i aria-hidden="true"></i>שילובים</p><span class="tag">מה קורה כשמשלבים</span></div>
+  <nav aria-label="ניווט">
+    <a href="#check" id="n-check">בדיקה</a>
+    <a href="#matrix" id="n-matrix">מטריצה</a>
+    <a href="#info" id="n-info">מידע</a>
+  </nav>
+</header>
+
+<section id="v-check">
+  <input type="search" id="q" placeholder="חיפוש: ריטלין, אלכוהול, זאנקס" aria-label="חיפוש תרופה או חומר">
+  <div id="lists"></div>
+  <div class="tray" aria-live="polite">
+    <div class="row"><span id="count" class="mu">לא נבחר דבר</span><button class="ghost" id="clear" type="button">ניקוי</button></div>
+    <div id="verdict" class="verdict vn">בחרו לפחות שני פריטים כדי לראות שילובים.</div>
+  </div>
+  <div id="alerts"></div>
+  <div id="pairs"></div>
+  <div id="signs"></div>
+</section>
+
+<section id="v-matrix" hidden>
+  <h2>מטריצת שילובים</h2>
+  <p class="mu">כל משבצת היא שילוב של שני פריטים. הקישו על משבצת כדי לראות את הפירוט.</p>
+  <div class="seg"><button type="button" id="m-sel" aria-pressed="true">רק מה שבחרתי</button><button type="button" id="m-all" aria-pressed="false">הכל</button></div>
+  <div class="legend"><span class="bd b3">מסוכן</span><span class="bd b2">דורש פיקוח</span><span class="bd b1">לשים לב</span><span class="bd b0">לא ידוע על בעיה</span></div>
+  <div class="mx-wrap"><table class="mx" id="mx"></table></div>
+  <div id="mx-detail"></div>
+</section>
+
+<section id="v-info" hidden></section>
+
+<div class="help">
+  <div>מצב חירום: <a href="tel:101">מד״א 101</a></div>
+  <div>צריכים לדבר עם מישהו: <a href="tel:1201">ער״ן 1201</a>, כל שעות היממה</div>
+</div>
+<p class="fine">מידע כללי בלבד, לא תחליף לרופא או לרוקח. הכלי מסכם זוגות, אבל שלושה חומרים ומעלה יוצרים השפעה מצטברת, והמינון משנה את רמת הסיכון. אל תפסיקו או תשנו תרופה בלי רופא. לבדיקה מלאה: רוקח, או טבלאות הפחתת נזקים ב-tripsit.me.</p>
+</main>
+
+<script>
+const CLS={
+tca:["טריציקליים","נוגדי דיכאון ותיקים. מעכבים ספיגה חוזרת של סרוטונין ונוראדרנלין, ונקשרים גם לקולטנים נוספים, ולכן יש להם יותר תופעות לוואי.","יובש בפה, עצירות, ישנוניות, עלייה במשקל, סחרחורת בקימה. משפיעים על ההולכה החשמלית בלב ומורידים את סף הפרכוסים. מנת יתר מסוכנת מאוד.",["ser","dep","card"]],
+ssri:["SSRI","נוגדי דיכאון וחרדה שפועלים כמעט רק על סרוטונין. קו ראשון לדיכאון, חרדה ו-OCD.","בחילה בהתחלה, שינויים בשינה, פגיעה בתפקוד המיני. מעלים מעט סיכון לדימום. הפסקה פתאומית גורמת לתסמיני הפסקה.",["ser"]],
+amph:["ממריצים (אמפטמינים)","מגבירים שחרור של דופמין ונוראדרנלין, ובמידה פחותה סרוטונין. משמשים לטיפול בהפרעות קשב.","דופק ולחץ דם גבוהים, ירידה בתיאבון, נדודי שינה, חרדה. אסורים בתחרויות ספורט בלי פטור.",["stim","card"]],
+mph:["ממריצים (מתילפנידאט)","מעכבים ספיגה חוזרת של דופמין ונוראדרנלין. טיפול נפוץ בהפרעות קשב.","דופק ולחץ דם גבוהים, ירידה בתיאבון, נדודי שינה. אסורים בתחרויות ספורט בלי פטור.",["stim","card"]],
+nri:["לא-ממריץ לקשב","מעכב ספיגה חוזרת של נוראדרנלין. ההשפעה נבנית בהדרגה במשך שבועות.","דופק ולחץ דם מעט גבוהים, בחילה, ירידה בתיאבון. לא ברשימה האסורה בספורט.",["card"]],
+a2:["אגוניסטים אלפא-2","פותחו במקור ללחץ דם. משפרים ויסות של קשב ואימפולסיביות ומרגיעים.","ישנוניות, לחץ דם ודופק נמוכים. הפסקה פתאומית עלולה להקפיץ את לחץ הדם.",["dep"]],
+benzo:["בנזודיאזפינים","מרגיעים שמגבירים את פעולת GABA, המערכת המעכבת במוח. משמשים לחרדה, שינה ופרכוסים.","ישנוניות, פגיעה בריכוז ובקואורדינציה. בשימוש קבוע נוצרת תלות, והפסקה פתאומית עלולה לגרום לפרכוסים.",["dep"]],
+para:["משככי כאב (פרצטמול)","משכך כאבים ומוריד חום. בטוח ברוב השילובים.","מינון יתר פוגע בכבד. כדאי לשים לב שלא לוקחים פרצטמול משני מוצרים שונים.",[]],
+paracaf:["פרצטמול + קפאין","משכך כאבים עם קפאין שמגביר את ההשפעה.","הקפאין מעלה דופק ועלול להגביר חרדה ונדודי שינה, בעיקר עם ממריצים.",[]],
+nsaid:["נוגדי דלקת (NSAID)","מורידים דלקת, כאב וחום.","מגרים את הקיבה ומעלים סיכון לדימום, במיוחד יחד עם SSRI. בשימוש ממושך מעמיסים על הכליות.",[]],
+triptan:["טריפטנים","תרופות ייעודיות להתקף מיגרנה, שפועלות על קולטני סרוטונין ומכווצות כלי דם.","לחץ בחזה, סחרחורת. מוסיפים סרוטונין לשילובים.",["ser"]],
+tram:["אופיואיד סרוטונרגי","משכך כאבים אופיואידי שגם מעלה סרוטונין ונוראדרנלין.","מוריד את סף הפרכוסים, גורם לישנוניות ועלול לדכא נשימה. יוצר תלות.",["ser","dep"]],
+dxm:["דקסטרומתורפן","מדכא שיעול שנמצא בחלק מסירופי השיעול ללא מרשם. במינונים גבוהים משמש גם כחומר משנה תודעה.","מעלה סרוטונין. במינונים גבוהים גורם לניתוק ובלבול.",["ser"]],
+sjw:["צמח מרפא","היפריקום, תוסף שנמכר לשיפור מצב הרוח.","מעלה סרוטונין, ומחליש תרופות רבות כי הוא מאיץ את פירוקן בכבד.",["ser"]],
+alc:["אלכוהול","מדכא של מערכת העצבים המרכזית.","מצטבר עם כל חומר מרגיע, מסווה ע״י ממריצים, ומחמיר מצב רוח וחרדה ביום שאחרי.",["dep"]],
+thc:["קנאביס","THC ו-CBD פועלים על המערכת האנדוקנבינואידית.","מעלה דופק, עלול לגרום לחרדה ופרנויה. CBD מעכב אנזימים בכבד ומשנה רמות של תרופות.",[]],
+psy:["פסיכדלים","LSD ופסילוסיבין (פטריות) פועלים על קולטני סרוטונין 5-HT2A.","עם SSRI ההשפעה נחלשת, ועם טריציקליים יש דיווחים על הגברה. הסיכון העיקרי נפשי.",["ser"]],
+mdma:["אמפתמינים משני תודעה","MDMA משחרר כמויות גדולות של סרוטונין, וגם דופמין ונוראדרנלין.","חום גוף, התייבשות, עומס על הלב. מסוכן מאוד עם כל חומר סרוטונרגי.",["ser","stim","card"]],
+coke:["קוקאין","ממריץ שחוסם ספיגה חוזרת של דופמין, נוראדרנלין וסרוטונין.","עומס חד על הלב וכלי הדם, הפרעות קצב, פרכוסים.",["stim","card"]],
+ghb:["מדכאים","GHB מדכא חזק של מערכת העצבים, עם טווח צר בין השפעה למנת יתר.","דיכוי נשימה ואובדן הכרה, במיוחד עם אלכוהול או בנזודיאזפינים.",["dep"]],
+ket:["דיסוציאטיבים","קטמין הוא חומר הרדמה שגורם לניתוק.","בלבול, בחילה, עלייה בלחץ הדם. מסוכן עם מדכאים אחרים.",["dep"]]
+};
+const ITEMS=[
+["clomi","אנפרניל","קלומיפרמין","med","tca","הטריציקלי עם ההשפעה הסרוטונרגית החזקה ביותר. נחשב יעיל במיוחד ל-OCD."],
+["ami","אלטרול","אמיטריפטילין","med","tca","משמש גם במינון נמוך לכאב כרוני, מניעת מיגרנה ושינה."],
+["nort","נורטריפטילין","","med","tca","טריציקלי עם פחות ישנוניות יחסית."],
+["sert","לוסטרל","סרטרלין","med","ssri","נפוץ בהריון ובמחלות לב. במינונים גבוהים משפיע מעט על אנזים CYP2D6."],
+["esc","ציפרלקס","אסציטלופרם","med","ssri","נחשב נסבל במיוחד, עם מעט אינטראקציות."],
+["cit","ציפרמיל","ציטלופרם","med","ssri","במינונים גבוהים מאריך את מקטע QT בלב."],
+["flx","פרוזק","פלואוקסטין","med","ssri","נשאר בגוף זמן רב. מעכב חזק של CYP2D6 ומעלה רמות של תרופות אחרות."],
+["parox","סרוקסט / פקסט","פרוקסטין","med","ssri","מעכב חזק של CYP2D6. תסמיני הפסקה בולטים יחסית."],
+["flv","פבוקסיל","פלובוקסמין","med","ssri","מעכב חזק של אנזים CYP1A2 ומעלה רמות של תרופות רבות."],
+["vyv","ויואנס","ליסדקסאמפטמין","med","amph","הופכת לאמפטמין רק בגוף, ולכן ההשפעה הדרגתית וממושכת."],
+["adr","אדרל","מלחי אמפטמין","med","amph","ממריץ מהיר יחסית."],
+["mph","ריטלין / קונצרטה","מתילפנידאט","med","mph","קונצרטה היא גרסה בשחרור מושהה."],
+["atx","סטרטרה","אטומוקסטין","med","nri","מפורקת ע״י CYP2D6, ולכן פרוזק ופרוקסטין מעלים את רמתה."],
+["guan","גואנפצין","אינטוניב","med","a2","נוטה להרגיע ולגרום לעייפות קלה."],
+["clon","קלונידין","","med","a2","קרובה לגואנפצין, עם יותר ירידת לחץ דם."],
+["diaz","אסיבל / ואליום","דיאזפאם","med","benzo","פועל לאורך זמן רב."],
+["alp","זאנקס","אלפרזולם","med","benzo","פועל קצר וחזק, ולכן יוצר יותר תלות וריבאונד של חרדה."],
+["clz","ריבוטריל","קלונזפאם","med","benzo","פועל לאורך זמן. משמש גם לפרכוסים."],
+["lor","לוריבן","לוראזפאם","med","benzo","פועל לטווח בינוני."],
+["trip","טריפטנים","סומטריפטן ואחרים","med","triptan",""],
+["tram","טרמדול","","med","tram",""],
+["para","אקמול","פרצטמול","otc","para",""],
+["acf","אקמול פוקוס","פרצטמול + קפאין","otc","paracaf",""],
+["ibu","נורופן / אדוויל","איבופרופן","otc","nsaid",""],
+["nap","נקסין","נפרוקסן","otc","nsaid","פועל לאורך זמן רב יותר מאיבופרופן."],
+["dxm","דקסטרומתורפן","בחלק מסירופי השיעול","otc","dxm",""],
+["sjw","St. John's Wort","היפריקום","otc","sjw",""],
+["alc","אלכוהול","","sub","alc",""],
+["thc","קנאביס","","sub","thc",""],
+["psy","LSD / פטריות","","sub","psy",""],
+["mdma","MDMA","אקסטזי, מולי","sub","mdma",""],
+["coke","קוקאין","","sub","coke",""],
+["speed","ספיד","אמפטמין רחוב","sub","amph","אותו חומר פעיל כמו תרופות האמפטמין, בלי שליטה על מינון וטוהר."],
+["ghb","GHB","","sub","ghb",""],
+["ket","קטמין","","sub","ket",""]
+];
+const GROUPS=[["med","תרופות מרשם"],["otc","ללא מרשם ותוספים"],["sub","חומרים"]];
+const BY=Object.fromEntries(ITEMS.map(i=>[i[0],i]));
+const CM={};
+function c(a,b,l,t){CM[a+"|"+b]=[l,t]}
+c("tca","tca",3,"כפל טריציקליים: עומס על הלב וסרוטונין");
+c("tca","ssri",2,"סיכון לתסמונת סרוטונין. חלק מה-SSRI מעלים את רמת הטריציקלי בדם");
+c("tca","amph",2,"דופק, לחץ דם וסף פרכוסים. סיכון נדיר לתסמונת סרוטונין");
+c("tca","mph",2,"ריטלין מעלה את רמת הטריציקלי. דופק ולחץ דם");
+c("tca","nri",2,"שניהם מעלים נוראדרנלין ומפורקים באותו אנזים. עומס על הלב");
+c("tca","a2",1,"ישנוניות וסחרחורת. הטריציקלי עלול להחליש את התרופה");
+c("tca","benzo",1,"ישנוניות מצטברת, פגיעה בריכוז ובנהיגה");
+c("tca","paracaf",1,"הקפאין מוסיף לדופק המהיר");
+c("tca","nsaid",1,"סיכון לדימום בקיבה בשימוש קבוע");
+c("tca","triptan",2,"סיכון לתסמונת סרוטונין");
+c("tca","tram",3,"תסמונת סרוטונין ופרכוסים");
+c("tca","dxm",2,"סיכון לתסמונת סרוטונין");
+c("tca","sjw",2,"סיכון לתסמונת סרוטונין ושינוי ברמות התרופה");
+c("tca","alc",3,"טשטוש, ירידת לחץ דם והפרעות קצב");
+c("tca","thc",2,"דופק מהיר ובלבול. CBD עלול להעלות את רמת הטריציקלי");
+c("tca","psy",2,"דיווחים על חוויה מוגברת וקשה");
+c("tca","mdma",3,"סיכון גבוה לתסמונת סרוטונין ולחום גוף קיצוני");
+c("tca","coke",3,"הפרעות קצב ופרכוסים");
+c("tca","ghb",3,"דיכוי מערכת העצבים והנשימה");
+c("tca","ket",2,"טשטוש, דופק ולחץ דם");
+c("ssri","ssri",3,"לא משלבים שני SSRI");
+c("ssri","amph",1,"שילוב נפוץ. סיכון סרוטונין נמוך");
+c("ssri","mph",0,"שילוב נפוץ בטיפול");
+c("ssri","nri",1,"דופק. חלק מה-SSRI מעלים את רמת סטרטרה");
+c("ssri","a2",0,"שילוב נפוץ בטיפול");
+c("ssri","benzo",0,"שילוב נפוץ בטיפול");
+c("ssri","nsaid",1,"סיכון לדימום בקיבה בשימוש קבוע");
+c("ssri","triptan",1,"סיכון סרוטונין נמוך אך קיים");
+c("ssri","tram",3,"תסמונת סרוטונין ופרכוסים");
+c("ssri","dxm",2,"סיכון לתסמונת סרוטונין");
+c("ssri","sjw",2,"סיכון לתסמונת סרוטונין");
+c("ssri","alc",1,"ישנוניות. מחמיר מצב רוח וחרדה");
+c("ssri","thc",1,"חרדה אצל חלק מהאנשים");
+c("ssri","psy",1,"ההשפעה נחלשת. סכנה: להפסיק את התרופה או לקחת יותר");
+c("ssri","mdma",3,"תסמונת סרוטונין. ההשפעה נחלשת ומובילה ללקיחת יותר");
+c("ssri","coke",2,"סיכון סרוטונין ועומס על הלב");
+c("ssri","ket",1,"טשטוש");
+["amph","mph"].forEach(s=>{
+ c(s,"nri",1,"דופק ולחץ דם");c(s,"a2",0,"שילוב נפוץ בטיפול בקשב");c(s,"benzo",1,"השפעות מנוגדות שמסוות זו את זו");
+ c(s,"paracaf",1,"קפאין: דופק, חרדה ונדודי שינה");c(s,"triptan",1,"לחץ דם");
+ c(s,"alc",2,"הממריץ מסווה את השכרות, והיא נוחתת כשהוא יורד");c(s,"thc",1,"דופק וחרדה");c(s,"psy",1,"חרדה ודופק מוגברים");
+ c(s,"mdma",3,"עומס קיצוני על הלב וחום גוף");c(s,"coke",3,"שני ממריצים. סיכון ממשי ללב");c(s,"ghb",2,"הממריץ מסווה, ואז נפילה פתאומית");c(s,"ket",1,"לחץ דם ודופק")});
+c("amph","amph",2,"כפל ממריצים");c("mph","mph",2,"כפל ממריצים");c("amph","mph",2,"שני ממריצים. לא משלבים בלי הוראת רופא");
+c("amph","tram",2,"סרוטונין וסף פרכוסים");c("mph","tram",1,"סף פרכוסים");c("amph","dxm",1,"סיכון סרוטונין");
+c("nri","paracaf",1,"קפאין: דופק ולחץ דם");c("nri","triptan",1,"לחץ דם");c("nri","alc",1,"סחרחורת");c("nri","thc",1,"דופק");
+c("nri","psy",1,"דופק ולחץ דם");c("nri","mdma",3,"עומס על הלב ולחץ דם");c("nri","coke",2,"דופק ולחץ דם");c("nri","ket",1,"לחץ דם");
+c("a2","a2",2,"כפל: ירידת לחץ דם ודופק");c("a2","benzo",1,"ישנוניות וירידת לחץ דם");c("a2","alc",2,"ישנוניות וירידת לחץ דם");
+c("a2","thc",1,"ירידת לחץ דם וישנוניות");c("a2","mdma",1,"השפעות מנוגדות על לחץ הדם");c("a2","coke",1,"השפעות מנוגדות על לחץ הדם");
+c("a2","ghb",2,"ישנוניות ודיכוי");c("a2","ket",1,"ישנוניות");c("a2","tram",1,"ישנוניות");
+c("benzo","benzo",2,"כפל בנזודיאזפינים: דיכוי מצטבר");c("benzo","alc",3,"דיכוי נשימה");c("benzo","ghb",3,"דיכוי נשימה");
+c("benzo","ket",2,"דיכוי נשימה וטשטוש");c("benzo","tram",3,"דיכוי נשימה");c("benzo","thc",1,"ישנוניות");
+c("benzo","mdma",1,"מסווה השפעות");c("benzo","coke",1,"מסווה השפעות");c("benzo","dxm",2,"טשטוש ודיכוי");c("benzo","sjw",1,"הצמח עלול להחליש את התרופה");
+c("para","paracaf",2,"כפל פרצטמול. קל לעבור את המינון היומי המותר");c("para","para",2,"כפל פרצטמול");c("paracaf","paracaf",2,"כפל פרצטמול וקפאין");
+c("para","alc",1,"פרצטמול עם הרבה אלכוהול מעמיס על הכבד");c("paracaf","alc",1,"פרצטמול עם הרבה אלכוהול מעמיס על הכבד");
+c("paracaf","mdma",2,"קפאין מגביר חום גוף ועומס על הלב");c("paracaf","coke",2,"עומס על הלב");
+c("nsaid","nsaid",2,"כפל נוגדי דלקת: קיבה וכליות");c("nsaid","alc",1,"סיכון לדימום בקיבה");
+c("triptan","triptan",2,"לא משלבים שני טריפטנים");c("triptan","tram",2,"סיכון לתסמונת סרוטונין");c("triptan","psy",1,"שניהם פועלים על סרוטונין");
+c("triptan","mdma",2,"סרוטונין ועומס על הלב");c("triptan","coke",2,"כיווץ כלי דם");c("triptan","dxm",1,"סיכון סרוטונין");
+c("tram","dxm",2,"סיכון לתסמונת סרוטונין");c("tram","sjw",2,"סיכון לתסמונת סרוטונין");c("tram","alc",3,"דיכוי נשימה");
+c("tram","ghb",3,"דיכוי נשימה");c("tram","ket",2,"דיכוי וטשטוש");c("tram","mdma",3,"תסמונת סרוטונין ופרכוסים");c("tram","coke",2,"פרכוסים");c("tram","thc",1,"ישנוניות");
+c("dxm","sjw",1,"סיכון סרוטונין");c("dxm","mdma",3,"תסמונת סרוטונין");c("dxm","alc",2,"טשטוש ובלבול");c("dxm","ket",2,"ניתוק ובלבול עמוקים");
+c("sjw","mdma",2,"סיכון סרוטונין");
+c("alc","thc",1,"בחילה וסחרחורת");c("alc","psy",1,"בלבול ובחילה");c("alc","mdma",2,"התייבשות וחום גוף");
+c("alc","coke",2,"נוצר בגוף חומר רעיל ללב");c("alc","ghb",3,"דיכוי נשימה. מקרי מוות מתועדים");c("alc","ket",3,"דיכוי נשימה והקאה");
+c("thc","psy",1,"מגביר את החוויה ואת החרדה");c("thc","mdma",1,"דופק וחרדה");c("thc","coke",1,"דופק");c("thc","ghb",1,"ישנוניות");c("thc","ket",1,"בלבול");
+c("psy","psy",1,"מגביר ומאריך את החוויה");c("psy","mdma",1,"חוויה עוצמתית ועומס נפשי");c("psy","coke",1,"דופק וחרדה");c("psy","ghb",1,"בלבול");c("psy","ket",1,"ניתוק ובלבול");
+c("mdma","coke",2,"עומס קיצוני על הלב");c("mdma","ghb",2,"סיכון לאובדן הכרה");c("mdma","ket",1,"בלבול");
+c("coke","ghb",2,"מסווה, ואז נפילה פתאומית");c("coke","ket",1,"לחץ דם");c("ghb","ket",3,"דיכוי נשימה");
+const OV={};
+function o(a,b,l,t){OV[a+"|"+b]=[l,t]}
+["clomi","ami","nort"].forEach(t=>{
+ o("flx",t,3,"פרוזק מעלה מאוד את רמת הטריציקלי בדם, בנוסף לסיכון הסרוטונין");
+ o("parox",t,3,"פרוקסטין מעלה מאוד את רמת הטריציקלי בדם, בנוסף לסיכון הסרוטונין");
+ o("flv",t,3,"פבוקסיל מעלה מאוד את רמת הטריציקלי בדם, בנוסף לסיכון הסרוטונין");
+ o("cit",t,2,"סיכון סרוטונין, ושניהם מאריכים QT")});
+o("sert","clomi",2,"סיכון לתסמונת סרוטונין. לוסטרל מעלה את רמת אנפרניל בדם");
+o("flx","atx",2,"פרוזק מעלה את רמת סטרטרה פי כמה. בדרך כלל מורידים מינון");
+o("parox","atx",2,"פרוקסטין מעלה את רמת סטרטרה פי כמה. בדרך כלל מורידים מינון");
+o("esc","atx",0,"כמעט ללא השפעה על רמת סטרטרה");o("cit","atx",0,"כמעט ללא השפעה על רמת סטרטרה");
+["vyv","adr","speed"].forEach(a=>{o("flx",a,1,"פרוזק מעלה מעט את רמת האמפטמין");o("parox",a,1,"פרוקסטין מעלה מעט את רמת האמפטמין")});
+["vyv","adr","mph"].forEach(a=>o(a,"speed",3,"כפל אמפטמינים, בלי שליטה על מינון וטוהר"));
+["clz","diaz","alp","lor"].forEach(b=>o("flv",b,1,"פבוקסיל מעלה את רמת חלק מהבנזודיאזפינים"));
+function key(a,b){return OV[a+"|"+b]||OV[b+"|"+a]}
+function get(a,b){
+ const k=key(a,b);if(k)return k;
+ const A=BY[a][4],B=BY[b][4];
+ return CM[A+"|"+B]||CM[B+"|"+A]||[0,"לא ידועה אינטראקציה בולטת. עדיין שווה לשאול רוקח"]}
+const tags=id=>CLS[BY[id][4]][3];
+const LV=["לא ידוע על בעיה","לשים לב","דורש פיקוח","מסוכן"];
+const VERD=["לא נמצאו אינטראקציות בולטות בין הפריטים שנבחרו.","יש שילובים שכדאי לשים לב אליהם.","יש שילובים שדורשים פיקוח רפואי.","יש כאן שילוב מסוכן."];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+
+let sel=new Set(),mxAll=false,mxPick=null;
+try{JSON.parse(localStorage.getItem("combo-sel")||"[]").forEach(k=>BY[k]&&sel.add(k))}catch(e){}
+function save(){try{localStorage.setItem("combo-sel",JSON.stringify([...sel]))}catch(e){}}
+function toggle(k){sel.has(k)?sel.delete(k):sel.add(k);save();renderCheck()}
+
+function renderLists(){
+ const q=$("q").value.trim().toLowerCase(),L=$("lists");L.innerHTML="";
+ GROUPS.forEach(([g,name])=>{
+  const items=ITEMS.filter(i=>i[3]===g&&(!q||(i[1]+" "+i[2]+" "+CLS[i[4]][0]).toLowerCase().includes(q)));
+  if(!items.length)return;
+  const w=document.createElement("div");w.innerHTML='<p class="gname">'+name+'</p>';
+  const caps=document.createElement("div");caps.className="caps";
+  items.forEach(([k,n,sub])=>{const b=document.createElement("button");b.type="button";b.className="cap";b.setAttribute("aria-pressed",sel.has(k));
+   b.innerHTML='<i class="h" aria-hidden="true"></i><span>'+esc(n)+(sub?'<small>'+esc(sub)+'</small>':'')+'</span>';b.onclick=()=>toggle(k);caps.appendChild(b)});
+  w.appendChild(caps);L.appendChild(w)});
+ if(!L.children.length)L.innerHTML='<p class="gname">לא נמצא. נסו שם אחר, או את השם הגנרי.</p>'}
+
+function signsFor(s){
+ const cnt=t=>s.filter(k=>tags(k).includes(t)).length,out=[];
+ if(cnt("ser")>=2)out.push(["תסמונת סרוטונין","אי-שקט, רעד, הזעה, חום, דופק מהיר, שלשול, אישונים מורחבים, עוויתות או נוקשות בשרירים. חום גבוה עם בלבול הוא מצב חירום."]);
+ if(cnt("dep")>=2)out.push(["דיכוי נשימה","קשה להעיר, נשימה איטית, שטחית או עם הפסקות, נחירות או גרגור חריגים, שפתיים כחלחלות. להשכיב על הצד, לא להשאיר לבד, להזעיק 101."]);
+ if(cnt("card")>=2||cnt("stim")>=2)out.push(["לב","דפיקות לב חזקות או לא סדירות, כאב בחזה, קוצר נשימה, התעלפות או כמעט-התעלפות."]);
+ return out}
+
+function renderCheck(){
+ renderLists();const s=[...sel];
+ $("count").textContent=s.length?("נבחרו "+s.length+": "+s.map(k=>BY[k][1]).join(", ")):"לא נבחר דבר";
+ const v=$("verdict");$("alerts").innerHTML=$("pairs").innerHTML=$("signs").innerHTML="";
+ if(s.length<2){v.className="verdict vn";v.textContent="בחרו לפחות שני פריטים כדי לראות שילובים.";return}
+ const pairs=[];for(let i=0;i<s.length;i++)for(let j=i+1;j<s.length;j++){const[l,t]=get(s[i],s[j]);pairs.push([s[i],s[j],l,t])}
+ pairs.sort((a,b)=>b[2]-a[2]);v.className="verdict v"+pairs[0][2];v.textContent=VERD[pairs[0][2]];
+ const cnt=t=>s.filter(k=>tags(k).includes(t)).length,al=[];
+ if(cnt("ser")>=3)al.push(["הצטברות סרוטונין",cnt("ser")+" מהפריטים מעלים סרוטונין. גם אם כל זוג נראה סביר, יחד הסיכון לתסמונת סרוטונין גבוה יותר."]);
+ if(cnt("dep")>=2)al.push(["הצטברות דיכוי",cnt("dep")+" מהפריטים מאטים את מערכת העצבים. ההשפעה מצטברת, עד דיכוי נשימה."]);
+ if(cnt("card")>=2)al.push(["עומס על הלב",cnt("card")+" מהפריטים משפיעים על הדופק, לחץ הדם או קצב הלב."]);
+ $("alerts").innerHTML=al.map(([h,t])=>'<div class="alert"><b>'+h+'</b>'+t+'</div>').join("");
+ $("pairs").innerHTML="<h2>כל השילובים</h2>"+pairs.map(([a,b,l,t])=>'<div class="pair"><span class="bd b'+l+'">'+LV[l]+'</span><div><div class="pn">'+esc(BY[a][1])+' + '+esc(BY[b][1])+'</div><div class="pt">'+esc(t)+'</div></div></div>').join("");
+ const sg=signsFor(s);if(sg.length)$("signs").innerHTML="<h2>סימנים שמחייבים עזרה מיד</h2>"+sg.map(([h,t])=>'<div class="card"><b>'+h+'</b><p>'+t+'</p></div>').join("")}
+
+function renderMatrix(){
+ $("m-sel").setAttribute("aria-pressed",!mxAll);$("m-all").setAttribute("aria-pressed",mxAll);
+ let ids=mxAll?ITEMS.map(i=>i[0]):[...sel];
+ const T=$("mx");
+ if(ids.length<2){T.innerHTML='<tr><td style="width:auto;height:auto;padding:14px" class="mu">בחרו לפחות שני פריטים בלשונית הבדיקה, או הציגו הכל.</td></tr>';$("mx-detail").innerHTML="";return}
+ let h='<thead><tr><th></th>'+ids.map(k=>'<th scope="col">'+esc(BY[k][1])+'</th>').join("")+'</tr></thead><tbody>';
+ ids.forEach(a=>{h+='<tr><th scope="row">'+esc(BY[a][1])+'</th>';ids.forEach(b=>{
+  if(a===b){h+='<td class="cx"></td>';return}
+  const l=get(a,b)[0],on=mxPick&&((mxPick[0]===a&&mxPick[1]===b)||(mxPick[0]===b&&mxPick[1]===a));
+  h+='<td class="c'+l+(on?' on':'')+'"><button type="button" data-a="'+a+'" data-b="'+b+'" aria-label="'+esc(BY[a][1]+" + "+BY[b][1]+": "+LV[l])+'"></button></td>'});h+='</tr>'});
+ T.innerHTML=h+'</tbody>';
+ T.querySelectorAll("button").forEach(b=>b.onclick=()=>{mxPick=[b.dataset.a,b.dataset.b];renderMatrix();$("mx-detail").scrollIntoView({block:"nearest",behavior:"smooth"})});
+ if(mxPick&&ids.includes(mxPick[0])&&ids.includes(mxPick[1])){const[a,b]=mxPick,[l,t]=get(a,b);
+  $("mx-detail").innerHTML='<div class="card"><span class="bd b'+l+'">'+LV[l]+'</span><div class="pn" style="margin-top:8px">'+esc(BY[a][1])+' + '+esc(BY[b][1])+'</div><p>'+esc(t)+'</p></div>'}
+ else $("mx-detail").innerHTML=""}
+
+function renderInfo(id){
+ const V=$("v-info");
+ if(id&&BY[id]){const[k,n,g,grp,cl,note]=BY[id],C=CLS[cl];
+  const rows=ITEMS.filter(i=>i[0]!==k).map(i=>[i[0],...get(k,i[0])]).filter(r=>r[1]>0).sort((a,b)=>b[1]-a[1]);
+  V.innerHTML='<div class="dt"><p style="margin-top:18px"><a href="#info">כל הפריטים</a></p><h1>'+esc(n)+'</h1>'+(g?'<div class="mu">'+esc(g)+'</div>':'')+'<span class="chip">'+esc(C[0])+'</span>'+
+  '<h3>מה זה עושה</h3><p>'+esc(C[1])+'</p>'+(note?'<p>'+esc(note)+'</p>':'')+'<h3>לשים לב</h3><p>'+esc(C[2])+'</p>'+
+  '<p style="margin-top:16px"><button type="button" class="pri" id="addsel">'+(sel.has(k)?'נמצא בבדיקה':'הוספה לבדיקה')+'</button></p>'+
+  '<h2>שילובים בעייתיים</h2>'+(rows.length?rows.map(([b,l,t])=>'<div class="pair"><span class="bd b'+l+'">'+LV[l]+'</span><div><div class="pn"><a href="#item/'+b+'" style="color:inherit">'+esc(BY[b][1])+'</a></div><div class="pt">'+esc(t)+'</div></div></div>').join(""):'<p class="mu">לא ידועות אינטראקציות בולטות.</p>')+'</div>';
+  $("addsel").onclick=()=>{sel.add(k);save();location.hash="#check"};window.scrollTo(0,0);return}
+ const fams=[...new Set(ITEMS.map(i=>i[4]))];
+ V.innerHTML='<h2>מידע על כל פריט</h2><p class="mu">מה כל תרופה או חומר עושה, ועם מה לא כדאי לשלב.</p>'+fams.map(f=>'<p class="gname">'+esc(CLS[f][0])+'</p><div class="fam">'+ITEMS.filter(i=>i[4]===f).map(i=>'<a href="#item/'+i[0]+'">'+esc(i[1])+(i[2]?'<small>'+esc(i[2])+'</small>':'')+'</a>').join("")+'</div>').join("")}
+
+function route(){
+ const h=location.hash.slice(1)||"check",[v,id]=h.split("/"),view=v==="item"?"info":(["check","matrix","info"].includes(v)?v:"check");
+ ["check","matrix","info"].forEach(x=>{$("v-"+x).hidden=x!==view;const n=$("n-"+x);view===x?n.setAttribute("aria-current","page"):n.removeAttribute("aria-current")});
+ if(view==="check")renderCheck();if(view==="matrix")renderMatrix();if(view==="info")renderInfo(v==="item"?id:null)}
+$("q").addEventListener("input",renderLists);
+$("clear").onclick=()=>{sel.clear();save();renderCheck()};
+$("m-sel").onclick=()=>{mxAll=false;renderMatrix()};$("m-all").onclick=()=>{mxAll=true;renderMatrix()};
+window.addEventListener("hashchange",route);route();
+</script>
+</body>
+</html>
